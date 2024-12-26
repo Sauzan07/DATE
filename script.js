@@ -7,7 +7,7 @@ const response = document.getElementById("response");
 yesButton.addEventListener("click", () => {
     // Ubah tampilan card
     card.classList.add("changed");
-    question.textContent = "Oke OTW sekarang!!!";
+    question.textContent = "GASS LOGINN!!!";
 });
 
 // Fungsi jika tombol "Gak" diklik
