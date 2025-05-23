@@ -1,29 +1,87 @@
-// Ambil elemen
-const yesButton = document.getElementById("yesButton");
-const noButton = document.getElementById("noButton");
-const response = document.getElementById("response");
+// KONFETI
+const canvas = document.getElementById("confetti-canvas");
+const ctx = canvas.getContext("2d");
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
 
-// Fungsi jika tombol "Ya" diklik
-yesButton.addEventListener("click", () => {
-    // Ubah tampilan card
-    card.classList.add("changed");
-    question.textContent = "GASS LOGINN!!!";
-});
+let confetti = [];
+for (let i = 0; i < 100; i++) {
+  confetti.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 6 + 4,
+    d: Math.random() * 50 + 10,
+    color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+    tilt: Math.random() * 10 - 5,
+    tiltAngle: 0,
+    tiltAngleIncrement: Math.random() * 0.07 + 0.05,
+  });
+}
 
-// Fungsi jika tombol "Gak" diklik
-noButton.addEventListener("click", () => {
-    // Pindahkan tombol ke posisi acak
-    const card = document.querySelector(".card");
-    const cardWidth = card.clientWidth;
-    const cardHeight = card.clientHeight;
+function drawConfetti() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  confetti.forEach((c) => {
+    ctx.beginPath();
+    ctx.lineWidth = c.r;
+    ctx.strokeStyle = c.color;
+    ctx.moveTo(c.x + c.tilt + c.r / 2, c.y);
+    ctx.lineTo(c.x + c.tilt, c.y + c.tilt + c.r / 2);
+    ctx.stroke();
+  });
 
-    const buttonWidth = noButton.offsetWidth;
-    const buttonHeight = noButton.offsetHeight;
+  updateConfetti();
+  requestAnimationFrame(drawConfetti);
+}
 
-    const randomX = Math.random() * (cardWidth - buttonWidth);
-    const randomY = Math.random() * (cardHeight - buttonHeight);
+function updateConfetti() {
+  confetti.forEach((c) => {
+    c.tiltAngle += c.tiltAngleIncrement;
+    c.y += (Math.cos(c.d) + 3 + c.r / 2) / 2;
+    c.tilt = Math.sin(c.tiltAngle) * 15;
 
-    noButton.style.position = "absolute";
-    noButton.style.left = `${randomX}px`;
-    noButton.style.top = `${randomY}px`;
-});
+    if (c.y > canvas.height) {
+      c.y = -10;
+      c.x = Math.random() * canvas.width;
+    }
+  });
+}
+
+drawConfetti();
+
+// TYPEWRITER
+const wishText = document.getElementById("wish-text");
+const wishes = [
+  "Semoga panjang umur dan sehat selalu! 🎂",
+  "Semoga Makin Panjang ✨",
+  "Banyak rezeki dan kebahagiaan menyertai 💰",
+  "Hari ini milikmu, rayakan dengan senyum! 😊"
+];
+
+let textIndex = 0;
+let charIndex = 0;
+
+function typeEffect() {
+  if (textIndex < wishes.length) {
+    if (charIndex < wishes[textIndex].length) {
+      wishText.textContent += wishes[textIndex].charAt(charIndex);
+      charIndex++;
+      setTimeout(typeEffect, 50);
+    } else {
+      textIndex++;
+      charIndex = 0;
+      setTimeout(() => {
+        wishText.textContent = '';
+        typeEffect();
+      }, 2000);
+    }
+  } else {
+    textIndex = 0;
+    setTimeout(typeEffect, 1000);
+  }
+}
+
+window.onload = typeEffect;
