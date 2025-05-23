@@ -47,9 +47,11 @@
     margin-top: 20px;
     min-height: 60px;
     border-right: 3px solid #fff;
-    white-space: nowrap;
-    overflow: hidden;
+    white-space: normal;   /* <-- IZINKAN WRAPPING */
+    overflow-wrap: break-word;
+    word-wrap: break-word;
   }
+  
   
   @keyframes fadeInDown {
     from {
